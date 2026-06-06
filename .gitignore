@@ -39,3 +39,18 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+/src/generated/prisma
+
+# database
+*.db
+*.db-journal
+
+# playwright
+.playwright-mcp/
+
+# screenshots at root
+/*.jpeg
+/*.png
+/figusdelmundial.png
+/figusdelmundial_images.json
