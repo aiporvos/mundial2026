@@ -1,17 +1,17 @@
-FROM node:20-alpine AS deps
+FROM node:20-bookworm-slim AS deps
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 
-FROM node:20-alpine AS builder
+FROM node:20-bookworm-slim AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 # Variables dummy solo para que Next.js pueda buildear sin DB real
 ENV DATABASE_URL="file:/tmp/build.db"
-ENV JWT_SECRET="build-placeholder-secret-not-used-in-production"
-ENV NEXTAUTH_SECRET="build-placeholder-secret-not-used-in-production"
+ENV JWT_SECRET="build-placeholder-not-used-in-production"
+ENV NEXTAUTH_SECRET="build-placeholder-not-used-in-production"
 ENV NEXTAUTH_URL="http://localhost:3000"
 ENV NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ENV NEXT_PUBLIC_MP_ALIAS="figus4198"
@@ -22,7 +22,7 @@ RUN npx prisma generate
 RUN npx prisma db push
 RUN npm run build
 
-FROM node:20-alpine AS runner
+FROM node:20-bookworm-slim AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 
