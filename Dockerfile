@@ -7,7 +7,19 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Variables dummy solo para que Next.js pueda buildear sin DB real
+ENV DATABASE_URL="file:/tmp/build.db"
+ENV JWT_SECRET="build-placeholder-secret-not-used-in-production"
+ENV NEXTAUTH_SECRET="build-placeholder-secret-not-used-in-production"
+ENV NEXTAUTH_URL="http://localhost:3000"
+ENV NEXT_PUBLIC_APP_URL="http://localhost:3000"
+ENV NEXT_PUBLIC_MP_ALIAS="figus4198"
+ENV NEXT_PUBLIC_PICKUP_ADDRESS="Mayorga 1590, San Rafael, Mendoza"
+ENV NEXT_PUBLIC_PICKUP_HOURS="9 a 21 hs"
+
 RUN npx prisma generate
+RUN npx prisma db push
 RUN npm run build
 
 FROM node:20-alpine AS runner
