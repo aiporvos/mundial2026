@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/navbar";
-import { CREDIT_PACKS, requestCreditPurchase } from "@/app/actions/credits";
-import type { PackKey } from "@/app/actions/credits";
+import { requestCreditPurchase } from "@/app/actions/credits";
+import { CREDIT_PACKS } from "@/lib/credit-packs";
+import type { PackKey } from "@/lib/credit-packs";
 import { ArrowLeft, Check, Zap, Copy } from "lucide-react";
 import Link from "next/link";
 import { formatPrice } from "@/lib/utils";
