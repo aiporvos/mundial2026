@@ -20,6 +20,7 @@ ENV NEXT_PUBLIC_PICKUP_HOURS="9 a 21 hs"
 
 RUN npx prisma generate
 RUN npx prisma db push
+RUN npm run seed:docker
 RUN npm run build
 
 FROM node:20-bookworm-slim AS runner

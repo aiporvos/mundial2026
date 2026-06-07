@@ -3,8 +3,8 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import path from "path";
 
-const dbUrl = `file:${path.resolve(process.cwd(), "dev.db")}`;
-const adapter = new PrismaLibSql({ url: dbUrl });
+const dbUrl = process.env.DATABASE_URL ?? `file:${path.resolve(process.cwd(), "dev.db")}`;
+const adapter = new PrismaLibSql({ url: dbUrl.startsWith("file:") ? dbUrl : `file:${dbUrl}` });
 const prisma = new PrismaClient({ adapter });
 
 const figuritas = [
