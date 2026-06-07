@@ -1,4 +1,8 @@
 #!/bin/sh
 set -e
-node node_modules/prisma/build/index.js db push --skip-generate
+# Si no existe la DB de producción, inicializarla con el schema del build
+if [ ! -f /data/prod.db ]; then
+  echo "Initializing production database..."
+  cp /app/schema.db /data/prod.db
+fi
 exec node server.js

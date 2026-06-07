@@ -38,7 +38,9 @@ COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/@libsql ./node_modules/@libsql
 COPY --from=builder /app/node_modules/dotenv ./node_modules/dotenv
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
+
+# DB con schema ya aplicado — se copia a /data/prod.db si no existe
+COPY --from=builder /tmp/build.db /app/schema.db
 
 COPY start.sh ./
 RUN chmod +x start.sh
