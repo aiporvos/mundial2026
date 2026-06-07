@@ -9,7 +9,7 @@
     "lint": "eslint",
     "seed": "dotenv -e .env -- tsx prisma/seed.ts",
     "seed:full": "dotenv -e .env -- tsx prisma/seed-full.ts",
-    "seed:docker": "tsx prisma/seed-full.ts"
+    "seed:docker": "npx tsx prisma/seed-full.ts"
   },
   "dependencies": {
     "@libsql/client": "^0.17.3",
