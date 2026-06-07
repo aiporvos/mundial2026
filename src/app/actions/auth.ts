@@ -39,24 +39,13 @@ export async function register(
 
   const hashedPassword = await bcrypt.hash(password, 12);
   const user = await prisma.user.create({
-    data: { name, lastName, email, password: hashedPassword, phone, dni },
+    data: { name, lastName, email, password: hashedPassword, phone, dni, emailVerified: true },
   });
 
   await prisma.creditBalance.create({ data: { userId: user.id, credits: 5 } });
 
-  const token = generateToken();
-  await prisma.verificationToken.create({
-    data: {
-      userId: user.id,
-      token,
-      type: "EMAIL_VERIFICATION",
-      expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000),
-    },
-  });
-
-  await sendVerificationEmail(email, token);
-
-  redirect("/registro/verificar");
+  await createSession(user.id);
+  redirect("/");
 }
 
 export async function login(
