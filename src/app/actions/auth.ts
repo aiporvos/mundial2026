@@ -44,7 +44,7 @@ export async function register(
 
   await prisma.creditBalance.create({ data: { userId: user.id, credits: 5 } });
 
-  await createSession(user.id);
+  await createSession(user.id, user.role);
   redirect("/");
 }
 
