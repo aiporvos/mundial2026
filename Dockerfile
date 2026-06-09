@@ -21,6 +21,8 @@ ENV NEXT_PUBLIC_PICKUP_HOURS="9 a 21 hs"
 RUN npx prisma generate
 RUN npx prisma db push
 RUN npm run seed:minimal
+# Guardar hash del seed para detectar cambios en el volumen
+RUN md5sum /tmp/build.db | awk '{print $1}' > /tmp/seed.version
 RUN npm run build
 
 FROM node:20-bookworm-slim AS runner
@@ -40,8 +42,9 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder /app/node_modules/@libsql ./node_modules/@libsql
 COPY --from=builder /app/node_modules/dotenv ./node_modules/dotenv
 
-# DB con schema ya aplicado — se copia a /data/prod.db si no existe
+# DB con schema ya aplicado — se copia a /data/prod.db si no existe o si el seed cambió
 COPY --from=builder /tmp/build.db /app/schema.db
+COPY --from=builder /tmp/seed.version /app/seed.version
 
 COPY start.sh ./
 RUN chmod +x start.sh
